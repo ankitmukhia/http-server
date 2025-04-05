@@ -7,7 +7,7 @@ const server = net.createServer((socket) => {
 		console.log("Result: ", res)
 	})
 
-	socket.write('Hello fr');
+	socket.write('HTTP/1.1');
 	socket.end();
 
 	socket.on("end", () => {
