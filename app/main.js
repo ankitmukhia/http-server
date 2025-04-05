@@ -2,7 +2,7 @@ const net = require("net");
 const PORT = 4221;
 
 const server = net.createServer((socket) => {
-	const httpResponse = "HTTP/1.1 200 OK \r\n\r\n"
+	const httpResponse = "HTTP/1.1 200 OK\r\n\r\n"
 	console.log("http res: ", httpResponse)
 
 	socket.write(httpResponse);
