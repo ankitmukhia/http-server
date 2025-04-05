@@ -7,14 +7,14 @@ const server = net.createServer((socket) => {
 		const url = res.split(' ')[1]
 
 		switch (url) {
-			case "/abcdefg":
-				const httpResponse404 = "HTTP/1.1 404 Not Found\r\n\r\n";
-				socket.write(httpResponse404);
+			case "/":
+				const httpResponse200 = "HTTP/1.1 200 OK\r\n\r\n";
+				socket.write(httpResponse200);
 				socket.end();
 				break;
 			default:
-				const httpResponse200 = "HTTP/1.1 200 OK\r\n\r\n";
-				socket.write(httpResponse200);
+				const httpResponse404 = "HTTP/1.1 404 Not Found\r\n\r\n";
+				socket.write(httpResponse404);
 				socket.end();
 		}
 	})
