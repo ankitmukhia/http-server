@@ -6,8 +6,9 @@ const rFile = fs.readFileSync('/tmp/foo', 'utf8', (err, data) => {
 	if (err) return console.error(err)
 	return data;
 })
-const fSizeBytes = fs.statSync('/tmp/foo').size
-
+console.log("rFile: ", rFile)
+const fSizeBytes = fs.statSync('/tmp/foo')?.size
+console.log("fSizeBytes: ", fSizeBytes)
 
 // need to write file, user will send 'Hello, World' with path. ou have to send back the file
 const server = net.createServer((socket) => {
