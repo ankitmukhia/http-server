@@ -1,15 +1,23 @@
 const net = require("net");
+const fs = require('fs')
 const PORT = 4221;
 
+const rFile = fs.readFileSync('/tmp/foo', 'utf8', (err, data) => {
+	if (err) return console.error(err)
+	return data;
+})
+const fSizeBytes = fs.statSync('/tmp/foo').size
+
+
+// need to write file, user will send 'Hello, World' with path. ou have to send back the file
 const server = net.createServer((socket) => {
 	socket.on('data', (data) => {
 		const res = data.toString();
+
 		// parse it in a way such that i can extract secific header
 		const [headers, body] = res.split('\r\n\r\n')
 		const lines = headers.split('\r\n')
 		let agentVal = "";
-
-		console.log("agentVal before: ", agentVal)
 
 		// extract headers
 		for (const line of lines.slice(1)) {
@@ -21,7 +29,7 @@ const server = net.createServer((socket) => {
 			}
 		}
 
-		console.log("agentVal after: ", agentVal)
+		// write file
 
 		const url = res.split(' ')[1]
 
@@ -43,6 +51,11 @@ const server = net.createServer((socket) => {
 			case '/user-agent':
 				const httpAgentResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${agentVal.length}\r\n\r\n${agentVal}`
 				socket.write(httpAgentResponse);
+				socket.end();
+				break;
+			case '/files/foo':
+				const httpFileResponse = `HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: ${fSizeBytes}\r\n\r\n${rFile}`
+				socket.write(httpFileResponse);
 				socket.end();
 				break;
 			default:
