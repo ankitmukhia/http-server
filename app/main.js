@@ -6,13 +6,15 @@ const server = net.createServer((socket) => {
 		const res = data.toString();
 		const url = res.split(' ')[1]
 
-		switch (url) {
+		const echoMatch = /^\/echo\/[^/]+$/.test(url) ? '/__ECHO__' : url;
+
+		switch (echoMatch) {
 			case "/":
 				const httpResponse200 = "HTTP/1.1 200 OK\r\n\r\n";
 				socket.write(httpResponse200);
 				socket.end();
 				break;
-			case "/echo/abc":
+			case "/__ECHO__":
 				const formatedUrl = url.slice('/echo/'.length);
 				const urlLength = formatedUrl.length;
 				const httpEchoResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${urlLength}\r\n\r\n${formatedUrl}`
