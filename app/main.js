@@ -13,8 +13,9 @@ const server = net.createServer((socket) => {
 				socket.end();
 				break;
 			default:
-				const httpResponse404 = "HTTP/1.1 404 Not Found\r\n\r\n";
-				socket.write(httpResponse404);
+				const formatedUrl = url.split('/')[1]
+				const httpEchoResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${formatedUrl.length}\r\n\r\n${formatedUrl}`
+				socket.write(httpEchoResponse);
 				socket.end();
 		}
 	})
