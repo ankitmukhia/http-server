@@ -12,14 +12,16 @@ const server = net.createServer((socket) => {
 				socket.write(httpResponse200);
 				socket.end();
 				break;
-			default:
-				// work on spliting the echo/abc
+			case "/echo/abc":
 				const formatedUrl = url.slice('/echo/'.length);
-				console.log("formatedUrl: ", formatedUrl)
 				const urlLength = formatedUrl.length;
-				console.log("urlLength: ", urlLength)
 				const httpEchoResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${urlLength}\r\n\r\n${formatedUrl}`
 				socket.write(httpEchoResponse);
+				socket.end();
+				break;
+			default:
+				const httpResponse404 = "HTTP/1.1 404 Not Found\r\n\r\n"
+				socket.write(httpResponse404);
 				socket.end();
 		}
 	})
