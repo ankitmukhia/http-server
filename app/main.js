@@ -15,7 +15,7 @@ const server = net.createServer((socket) => {
 			default:
 				// work on spliting the echo/abc
 				const formatedUrl = url.split('/echo/')[1]
-				const httpEchoResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${formatedUrl?.length}\r\n\r\n${formatedUrl}`
+				const httpEchoResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${formatedUrl.length}\r\n\r\n${formatedUrl}`
 				socket.write(httpEchoResponse);
 				socket.end();
 		}
