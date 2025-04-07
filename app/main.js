@@ -41,7 +41,7 @@ const server = net.createServer((socket) => {
 				socket.end();
 				break;
 			case '/user-agent':
-				const httpAgentResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 12\r\n\r\n${agentVal}`
+				const httpAgentResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${agentVal.length}\r\n\r\n${agentVal}`
 				socket.write(httpAgentResponse);
 				socket.end();
 				break;
