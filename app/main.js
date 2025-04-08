@@ -7,14 +7,17 @@ const dirFlagIndex = process.argv.indexOf('--directory')
 const dirPath = process.argv[dirFlagIndex + 1]
 
 try {
-	if (!fs.existsSync(dirPath)) {
+	if (fs.existsSync(dirPath)) {
+		const stat = fs.lstatSync(dirPath)
+		if (stat.isFile()) {
+			console.error("Error: --directory path points to a file, not a directory");
+			process.exit(1);
+		}
+	} else {
 		fs.mkdirSync(dirPath, { recursive: true });
-	} else if (!fs.lstatSync(dirPath).isDirectory()) {
-		console.error("Error: --directory path is a file, not a directory");
-		process.exit(1);
 	}
 } catch (err) {
-	console.error("Error creating directory:", err.message);
+	console.error("Error handling directory:", err.message);
 	process.exit(1);
 }
 
