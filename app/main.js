@@ -53,7 +53,9 @@ const server = net.createServer((socket) => {
 					const formatedFilePath = url.slice('/files/'.length);
 					const rFile = fs.readFileSync(`${dirPath}/${formatedFilePath}`, 'utf8')
 					const fSizeBytes = fs.statSync(`${dirPath}/${formatedFilePath}`).size
-					const httpFileResponse = `HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: ${fSizeBytes}\r\n\r\n${rFile}`
+					const httpFileResponse = `HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: ${fSizeBytes}\r\n\r\n${rFile}`;
+					socket.write(httpFileResponse);
+					socket.end();
 					break;
 				}
 			case '/user-agent':
