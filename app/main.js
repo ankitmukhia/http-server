@@ -51,6 +51,9 @@ const server = net.createServer((socket) => {
 					break;
 				} else {
 					const formatedFilePath = url.slice('/files/'.length);
+					if (!fs.existsSync(`${dirPath}${formatedFilePath}`)) {
+						return
+					}
 					const rFile = fs.readFileSync(`${dirPath}${formatedFilePath}`, 'utf8')
 					const fSizeBytes = fs.statSync(`${dirPath}${formatedFilePath}`).size
 					const httpFileResponse = `HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: ${fSizeBytes}\r\n\r\n${rFile}`;
