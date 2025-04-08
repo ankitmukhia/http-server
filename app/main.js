@@ -6,9 +6,17 @@ const PORT = 4221;
 const dirFlagIndex = process.argv.indexOf('--directory')
 const dirPath = process.argv[dirFlagIndex + 1]
 
-fs.mkdirSync(dirPath, { recursive: true }, (err) => {
-	console.error(err)
-})
+try {
+	if (!fs.existsSync(dirPath)) {
+		fs.mkdirSync(dirPath, { recursive: true });
+	} else if (!fs.lstatSync(dirPath).isDirectory()) {
+		console.error("Error: --directory path is a file, not a directory");
+		process.exit(1);
+	}
+} catch (err) {
+	console.error("Error creating directory:", err.message);
+	process.exit(1);
+}
 
 // need to write file, user will send 'Hello, World' with path. ou have to send back the file
 const server = net.createServer((socket) => {
