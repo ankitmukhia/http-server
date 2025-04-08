@@ -44,7 +44,8 @@ const server = net.createServer((socket) => {
 				socket.end();
 				break;
 			case "/__ECHO__":
-				if (url === "/echo/") {
+				console.log("url from echo: ", url)
+				if (url.startsWith('/echo/')) {
 					const formatedUrl = url.slice('/echo/'.length);
 					const urlLength = formatedUrl.length;
 					const httpEchoResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${urlLength}\r\n\r\n${formatedUrl}`
