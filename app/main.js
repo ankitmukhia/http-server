@@ -6,19 +6,8 @@ const PORT = 4221;
 const dirFlagIndex = process.argv.indexOf('--directory')
 const dirPath = process.argv[dirFlagIndex + 1]
 
-try {
-	if (fs.existsSync(dirPath)) {
-		const stat = fs.lstatSync(dirPath)
-		if (stat.isFile()) {
-			console.error("Error: --directory path points to a file, not a directory");
-			process.exit(1);
-		}
-	} else {
-		fs.mkdirSync(dirPath, { recursive: true });
-	}
-} catch (err) {
-	console.error("Error handling directory:", err.message);
-	process.exit(1);
+if (!fs.existsSync(dirPath)) {
+	fs.mkdirSync(dirPath, { recursive: true });
 }
 
 // need to write file, user will send 'Hello, World' with path. ou have to send back the file
