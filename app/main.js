@@ -6,7 +6,9 @@ const PORT = 4221;
 const dirFlagIndex = process.argv.indexOf('--directory')
 const dirPath = process.argv[dirFlagIndex + 1]
 
-fs.mkdirSync(dirPath, { recursive: true })
+fs.mkdirSync(dirPath, { recursive: true }, (err) => {
+	console.error(err)
+})
 
 // need to write file, user will send 'Hello, World' with path. ou have to send back the file
 const server = net.createServer((socket) => {
