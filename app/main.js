@@ -52,7 +52,8 @@ const server = net.createServer((socket) => {
 				} else {
 					const formatedFilePath = url.slice('/files/'.length);
 					if (!fs.existsSync(`${dirPath}${formatedFilePath}`)) {
-						return
+						defaultResponse(socket)
+						break;
 					}
 					const rFile = fs.readFileSync(`${dirPath}${formatedFilePath}`, 'utf8')
 					const fSizeBytes = fs.statSync(`${dirPath}${formatedFilePath}`).size
@@ -67,9 +68,7 @@ const server = net.createServer((socket) => {
 				socket.end();
 				break;
 			default:
-				const httpResponse404 = "HTTP/1.1 404 Not Found\r\n\r\n"
-				socket.write(httpResponse404);
-				socket.end();
+				defaultResponse(socket)
 		}
 	})
 
@@ -87,3 +86,9 @@ server.listen(PORT, () => {
 	console.log(`TCP is listening at port ${PORT}`)
 })
 
+
+const defaultResponse = (socket) => {
+	const httpResponse404 = "HTTP/1.1 404 Not Found\r\n\r\n"
+	socket.write(httpResponse404);
+	socket.end();
+} 
