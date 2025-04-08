@@ -18,6 +18,7 @@ const server = net.createServer((socket) => {
 		// parse it in a way such that i can extract secific header
 		const [headers, body] = res.split('\r\n\r\n')
 		const lines = headers.split('\r\n')
+		const reqType = lines[0].includes('POST')
 		let agentVal = "";
 
 		// extract headers
@@ -44,7 +45,6 @@ const server = net.createServer((socket) => {
 				socket.end();
 				break;
 			case "/__ECHO__":
-				console.log("url from echo: ", url)
 				if (url.startsWith('/echo/')) {
 					const formatedUrl = url.slice('/echo/'.length);
 					const urlLength = formatedUrl.length;
@@ -52,6 +52,19 @@ const server = net.createServer((socket) => {
 					socket.write(httpEchoResponse);
 					socket.end();
 					break;
+				} else if (reqType) {
+					const formatedFilePath = url.slice('/files/'.length);
+					try {
+						if (!fs.existsSync(`${dirPath}${formatedFilePath}`) && !!body) {
+							fs.writeFileSync(`${dirPath}${formatedFilePath}`, body)
+							const httpPostResponse = "HTTP/1.1 201 Created\r\n\r\n";
+							socket.write(httpPostResponse)
+							socket.end()
+							break;
+						}
+					} catch (err) {
+						console.error(err)
+					}
 				} else {
 					const formatedFilePath = url.slice('/files/'.length);
 					if (!fs.existsSync(`${dirPath}${formatedFilePath}`)) {
