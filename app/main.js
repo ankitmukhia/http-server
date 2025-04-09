@@ -50,7 +50,7 @@ const server = net.createServer((socket) => {
 				if (url.startsWith('/echo/')) {
 					const formatedUrl = url.slice('/echo/'.length);
 					const urlLength = formatedUrl.length;
-					const httpEchoResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n${encodingType && 'Content-Encoding: gzip'}\r\n\r\n${formatedUrl}`
+					const httpEchoResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Type: text/plain\r\n${encodingType && 'Content-Encoding: gzip'}\r\n\r\n${formatedUrl}`
 					socket.write(httpEchoResponse);
 					socket.end();
 					break;
