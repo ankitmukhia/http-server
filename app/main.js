@@ -17,7 +17,7 @@ const server = net.createServer((socket) => {
 
 		// parse it in a way such that i can extract secific header
 		const [headers, body] = res.split('\r\n\r\n')
-		console.log("body: ", body)
+		console.log("headers: ", headers)
 		const lines = headers.split('\r\n')
 		const reqType = lines[0].includes('POST')
 		let agentVal = "";
@@ -31,7 +31,7 @@ const server = net.createServer((socket) => {
 					agentVal = value;
 				}
 
-				if (key.toLowerCase().includes('accept-encoding') && value.toLowerCase() === 'gzip') {
+				if (key.toLowerCase().includes('accept-encoding') && value.toLowerCase().includes('gzip')) {
 					encodingType = true
 				}
 			}
