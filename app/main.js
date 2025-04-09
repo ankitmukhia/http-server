@@ -57,7 +57,7 @@ const server = net.createServer((socket) => {
 					const urlLength = formatedUrl.length;
 
 					// here error
-					const httpEchoResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${urlLength}\r\n${encodingType ? 'Content-Encoding: gzip': ''}\r\n${formatedUrl}`
+					const httpEchoResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${urlLength}\r\n${encodingType ? 'Content-Encoding: gzip\r\n': ''}\r\n\r\n${formatedUrl}`
 					socket.write(httpEchoResponse);
 					socket.end();
 					break;
