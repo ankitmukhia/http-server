@@ -29,12 +29,14 @@ const server = net.createServer((socket) => {
 				if (key.toLowerCase().includes('user-agent')) {
 					agentVal = value;
 				}
-
-				if (key.toLowerCase().includes('accept-encoding')) {
+				
+				if (key.toLowerCase().includes('accept-encoding') && value.toLowerCase() === 'gzip') {
 					encodingType = true;
 				}
 			}
 		}
+
+		console.log("encoding boolean: ", encodingType)
 
 		// write file
 
