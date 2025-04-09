@@ -19,15 +19,16 @@ const server = net.createServer((socket) => {
 		const [headers, body] = res.split('\r\n\r\n')
 		const lines = headers.split('\r\n')
 		const reqType = lines[0].includes('POST')
-		const encodingType = lines[4].includes('Accept-Encoding')
 		let agentVal = "";
+		let encodingType = false;
 
 		// extract headers
 		for (const line of lines.slice(1)) {
 			const [key, value] = line.split(': ')
 			if (key && value) {
-				if (key.toLowerCase().includes('user-agent')) {
-					agentVal = value
+				if (key.toLowerCase().includes('user-agent') || key.toLowerCase().includes('accept-encoding')) {
+					agentVal = value;
+					encodingType = true;
 				}
 			}
 		}
