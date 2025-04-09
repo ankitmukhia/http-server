@@ -17,6 +17,7 @@ const server = net.createServer((socket) => {
 
 		// parse it in a way such that i can extract secific header
 		const [headers, body] = res.split('\r\n\r\n')
+		console.log("body: ", body)
 		const lines = headers.split('\r\n')
 		const reqType = lines[0].includes('POST')
 		let agentVal = "";
@@ -29,9 +30,9 @@ const server = net.createServer((socket) => {
 				if (key.toLowerCase().includes('user-agent')) {
 					agentVal = value;
 				}
-				
+
 				if (key.toLowerCase().includes('accept-encoding') && value.toLowerCase() === 'gzip') {
-					encodingType = true;
+					encodingType = true
 				}
 			}
 		}
@@ -55,9 +56,8 @@ const server = net.createServer((socket) => {
 				if (url.startsWith('/echo/')) {
 					const formatedUrl = url.slice('/echo/'.length);
 					const urlLength = formatedUrl.length;
-
 					// here error
-					const httpEchoResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${urlLength}\r\n${encodingType ? 'Content-Encoding: gzip\r\n': ''}\r\n\r\n${formatedUrl}`
+					const httpEchoResponse = `HTTP/1.1 200 OK\r\n${encodingType ? "Content-Encoding: gzip\r\n" : ""}Content-Type: text/plain\r\nContent-Length: ${urlLength}\r\n\r\n${formatedUrl}`
 					socket.write(httpEchoResponse);
 					socket.end();
 					break;
