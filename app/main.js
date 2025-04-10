@@ -1,5 +1,4 @@
 const net = require("net")
-const zlip = require('zlip')
 const fs = require("fs")
 const PORT = 4221;
 
