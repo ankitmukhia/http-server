@@ -17,7 +17,7 @@ if (!fs.existsSync(dirPath)) {
 
 async function gzipCompressor(input) {
 	const buff = await gzip(input)
-	return buff
+	return buff.toString()
 }
 
 // need to write file, user will send 'Hello, World' with path. ou have to send back the file
