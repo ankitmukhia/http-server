@@ -5,7 +5,7 @@ const { promisify } = require('util')
 const PORT = 4221;
 
 // make zlib.gzip return promise
-const gzip = promisify(zlib.gunzip)
+const gzip = promisify(zlib.deflate)
 
 // Get directory from the command line
 const dirFlagIndex = process.argv.indexOf('--directory')
