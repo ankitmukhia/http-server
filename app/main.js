@@ -5,7 +5,7 @@ const { promisify } = require('util')
 const PORT = 4221;
 
 // make zlib.gzip return promise
-const gzip = promisify(zlib.deflate)
+const gzip = promisify(zlib.deflateSync)
 
 // Get directory from the command line
 const dirFlagIndex = process.argv.indexOf('--directory')
@@ -58,7 +58,8 @@ const server = net.createServer((socket) => {
 			case "/__ECHO__":
 				if (url.startsWith('/echo/')) {
 					const formatedUrl = url.slice('/echo/'.length);
-					const compressedVal = await gzipCompressor(formatedUrl)
+					// const compressedVal = await gzipCompressor(formatedUrl)
+					const compressedVal = zlib.deflateSync(formatedUrl)
 					console.log("compressed: ", compressedVal)
 					const urlLength = formatedUrl.length;
 					const compressedLength = compressedVal.length
