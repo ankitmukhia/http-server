@@ -1,4 +1,5 @@
 const net = require("net")
+const zlip = require('zlip')
 const fs = require("fs")
 const PORT = 4221;
 
@@ -10,14 +11,15 @@ if (!fs.existsSync(dirPath)) {
 	fs.mkdirSync(dirPath, { recursive: true });
 }
 
+
+
 // need to write file, user will send 'Hello, World' with path. ou have to send back the file
 const server = net.createServer((socket) => {
 	socket.on('data', (data) => {
 		const res = data.toString();
-
+		console.log("res: ", res)
 		// parse it in a way such that i can extract secific header
 		const [headers, body] = res.split('\r\n\r\n')
-		console.log("headers: ", headers)
 		const lines = headers.split('\r\n')
 		const reqType = lines[0].includes('POST')
 		let agentVal = "";
@@ -37,13 +39,7 @@ const server = net.createServer((socket) => {
 			}
 		}
 
-		console.log("encoding boolean: ", encodingType)
-
-		// write file
-
 		const url = res.split(' ')[1]
-
-		// const echoMatch = /^\/echo\/[^/]+$/.test(url) ? '/__ECHO__' : url;
 		const rMatch = /^\/(files|echo)(\/[^/]+)?$/.test(url) ? '/__ECHO__' : url;
 
 		switch (rMatch) {
