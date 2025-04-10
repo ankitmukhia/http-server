@@ -17,7 +17,7 @@ if (!fs.existsSync(dirPath)) {
 
 async function gzipCompressor(input) {
 	const buff = await gzip(input)
-	return buff.toString('hex')
+	return buff
 }
 
 // need to write file, user will send 'Hello, World' with path. ou have to send back the file
@@ -61,8 +61,9 @@ const server = net.createServer((socket) => {
 					const compressedVal = await gzipCompressor(formatedUrl)
 					console.log("compressed: ", compressedVal)
 					const urlLength = formatedUrl.length;
+					const compressedLength = compressedVal.length
 
-					const httpEchoResponse = `HTTP/1.1 200 OK\r\n${encodingType ? "Content-Encoding: gzip\r\n" : ""}Content-Type: text/plain\r\nContent-Length: ${urlLength}\r\n\r\n${encodingType ? compressedVal : formatedUrl}`
+					const httpEchoResponse = `HTTP/1.1 200 OK\r\n${encodingType ? "Content-Encoding: gzip\r\n" : ""}Content-Type: text/plain\r\nContent-Length: ${encodingType ? compressedLength : urlLength}\r\n\r\n${encodingType ? compressedVal : formatedUrl}`
 					socket.write(httpEchoResponse);
 					socket.end();
 					break;
