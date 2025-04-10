@@ -59,7 +59,7 @@ const server = net.createServer((socket) => {
 				if (url.startsWith('/echo/')) {
 					const formatedUrl = url.slice('/echo/'.length);
 					// const compressedVal = await gzipCompressor(formatedUrl)
-					const compressedVal = zlib.deflateSync(formatedUrl)
+					const compressedVal = zlib.gzipSync(formatedUrl)
 					console.log("compressed: ", compressedVal)
 					const urlLength = formatedUrl.length;
 					const compressedLength = compressedVal.length
