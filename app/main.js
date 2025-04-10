@@ -1,7 +1,11 @@
 const net = require("net")
 const fs = require("fs")
 const zlib = require('zlib')
+const { promisify } = require('util')
 const PORT = 4221;
+
+// make zlib.gzip return promise
+const gzip = promisify(zlib.gzip)
 
 // Get directory from the command line
 const dirFlagIndex = process.argv.indexOf('--directory')
@@ -11,20 +15,14 @@ if (!fs.existsSync(dirPath)) {
 	fs.mkdirSync(dirPath, { recursive: true });
 }
 
-function gzipCompressor(input) {
-	zlib.gzip(input, (err, buff) => {
-		if (err) {
-			console.log(err)
-			return
-		}
-
-		return buff.toString('hex')
-	})
+async function gzipCompressor(input) {
+	const buff = await gzip(input)
+	return buff.toString('hex')
 }
 
 // need to write file, user will send 'Hello, World' with path. ou have to send back the file
 const server = net.createServer((socket) => {
-	socket.on('data', (data) => {
+	socket.on('data', async (data) => {
 		const res = data.toString();
 		console.log("res: ", res)
 		// parse it in a way such that i can extract secific header
@@ -60,7 +58,8 @@ const server = net.createServer((socket) => {
 			case "/__ECHO__":
 				if (url.startsWith('/echo/')) {
 					const formatedUrl = url.slice('/echo/'.length);
-					const compressedVal = gzipCompressor(formatedUrl)
+					const compressedVal = await gzipCompressor("abc")
+					console.log("compressed: ", compressedVal)
 					const urlLength = formatedUrl.length;
 
 					const httpEchoResponse = `HTTP/1.1 200 OK\r\n${encodingType ? "Content-Encoding: gzip\r\n" : ""}Content-Type: text/plain\r\nContent-Length: ${urlLength}\r\n\r\n${encodingType ? compressedVal : formatedUrl}`
