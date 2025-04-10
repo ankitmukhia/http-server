@@ -1,5 +1,6 @@
 const net = require("net")
 const fs = require("fs")
+const zlib = require('zlib')
 const PORT = 4221;
 
 // Get directory from the command line
@@ -10,7 +11,16 @@ if (!fs.existsSync(dirPath)) {
 	fs.mkdirSync(dirPath, { recursive: true });
 }
 
+function gzipCompressor(input) {
+	zlib.gzip(input, (err, buff) => {
+		if (err) {
+			console.log(err)
+			return
+		}
 
+		return buff.toString('hex')
+	})
+}
 
 // need to write file, user will send 'Hello, World' with path. ou have to send back the file
 const server = net.createServer((socket) => {
@@ -50,9 +60,10 @@ const server = net.createServer((socket) => {
 			case "/__ECHO__":
 				if (url.startsWith('/echo/')) {
 					const formatedUrl = url.slice('/echo/'.length);
+					const compressedVal = gzipCompressor(formatedUrl)
 					const urlLength = formatedUrl.length;
-					// here error
-					const httpEchoResponse = `HTTP/1.1 200 OK\r\n${encodingType ? "Content-Encoding: gzip\r\n" : ""}Content-Type: text/plain\r\nContent-Length: ${urlLength}\r\n\r\n${formatedUrl}`
+
+					const httpEchoResponse = `HTTP/1.1 200 OK\r\n${encodingType ? "Content-Encoding: gzip\r\n" : ""}Content-Type: text/plain\r\nContent-Length: ${urlLength}\r\n\r\n${encodingType ? compressedVal : formatedUrl}`
 					socket.write(httpEchoResponse);
 					socket.end();
 					break;
