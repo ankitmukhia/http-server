@@ -58,7 +58,7 @@ const server = net.createServer((socket) => {
 			case "/__ECHO__":
 				if (url.startsWith('/echo/')) {
 					const formatedUrl = url.slice('/echo/'.length);
-					const compressedVal = await gzipCompressor("abc")
+					const compressedVal = await gzipCompressor(formatedUrl)
 					console.log("compressed: ", compressedVal)
 					const urlLength = formatedUrl.length;
 
